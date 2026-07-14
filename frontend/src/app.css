@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton-svelte";
+
+/* Import Skeleton Cerberus theme */
+@import "@skeletonlabs/skeleton/themes/cerberus";

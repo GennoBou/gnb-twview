@@ -1,0 +1,25 @@
+# Local thinking process and temporary files
+/docs/local/
+
+# Wails build outputs and temp files
+build/bin/
+/bin/
+/.task/
+frontend/node_modules/
+frontend/dist/
+.wails/
+
+# Windows temp files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment variables
+.env
+.env.local
+
+# Go binary and dependencies
+/gnb-twview.exe
+/gnb-twview
+/vendor/
+go.sum

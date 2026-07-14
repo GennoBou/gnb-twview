@@ -1,0 +1,10 @@
+{
+  "name": "gnb-twview",
+  "version": "0.1.0",
+  "description": "Twitch-specific minimalist browser",
+  "scripts": {
+    "dev": "wails3 dev",
+    "build": "wails3 build"
+  },
+  "private": true
+}

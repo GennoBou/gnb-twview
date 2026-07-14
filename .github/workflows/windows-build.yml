@@ -1,0 +1,51 @@
+name: Windows Build CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.26'
+        cache: true
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts/*'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies (Frontend)
+      shell: pwsh
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Install Wails CLI
+      shell: pwsh
+      run: |
+        go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-alpha2.117
+
+    - name: Build Application
+      shell: pwsh
+      run: |
+        # %GOPATH%\bin is added to PATH by setup-go on runners
+        wails3 build
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: gnb-twview-windows
+        path: bin/gnb-twview.exe

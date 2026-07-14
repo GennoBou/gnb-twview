@@ -1,0 +1,26 @@
+# Documentation Rules for gnb-twview
+
+Whenever you generate or modify documentation for this project, you MUST strictly adhere to the following rules:
+
+1. **Dual-Language Documentation (English & Japanese)**:
+   - All public documentation must be written in English as the primary version.
+   - A corresponding Japanese version of the document must ALWAYS be created alongside the English version.
+   - Both files must contain cross-links to each other at the very top of the page.
+     - English file: Link to the Japanese version at the top: `[日本語版 (Japanese)](./filename_ja.md)`
+     - Japanese file: Link to the English version at the top: `[English Edition](./filename.md)`
+
+2. **Root README Files**:
+   - The main entry point files in the root directory must be:
+     - `/README.md` (English version)
+     - `/README_ja.md` (Japanese version)
+
+3. **Public Documentation Directory**:
+   - All other public documentation files must be saved under the `/docs` directory.
+   - For example:
+     - `/docs/architecture.md` (English)
+     - `/docs/architecture_ja.md` (Japanese)
+
+4. **Local Workspace and AI Thinking Process**:
+   - The `/docs/local` directory is reserved for local, personal, and AI-thinking files.
+   - This directory is git-ignored and must NOT be committed to the repository.
+   - Feel free to store raw notes, scratch files, and intermediate thinking files here without needing to translate them.

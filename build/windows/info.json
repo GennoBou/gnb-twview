@@ -1,0 +1,15 @@
+{
+	"fixed": {
+		"file_version": "0.1.0"
+	},
+	"info": {
+		"0000": {
+			"ProductVersion": "0.1.0",
+			"CompanyName": "GennoBou",
+			"FileDescription": "A specialized minimalist browser for Twitch.",
+			"LegalCopyright": "(c) 2026, GennoBou",
+			"ProductName": "GNB Twitch Viewer",
+			"Comments": "v0.1.0 Release"
+		}
+	}
+}

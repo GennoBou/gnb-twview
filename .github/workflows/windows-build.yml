@@ -13,6 +13,8 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    outputs:
+      asset_sha256: ${{ steps.hash.outputs.asset_sha256 }}
 
     steps:
     - name: Checkout repository
@@ -54,6 +56,14 @@ jobs:
         name: gnb-twview-windows
         path: bin/gnb-twview.exe
 
+    - name: Calculate Hash
+      id: hash
+      if: startsWith(github.ref, 'refs/tags/v')
+      shell: pwsh
+      run: |
+        $hash = (Get-FileHash bin/gnb-twview.exe -Algorithm SHA256).Hash.ToLower()
+        echo "asset_sha256=$hash" >> $env:GITHUB_OUTPUT
+
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/v')
       shell: pwsh
@@ -61,3 +71,44 @@ jobs:
         gh release create ${{ github.ref_name }} bin/gnb-twview.exe --title "${{ github.ref_name }}" --notes "GNB Twitch Viewer ${{ github.ref_name }} Release"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-scoop-bucket:
+    name: Update Scoop Bucket
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gnb-twview Repository
+        uses: actions/checkout@v4
+        with:
+          path: gnb-twview
+
+      - name: Checkout Scoop Bucket Repository
+        uses: actions/checkout@v4
+        with:
+          repository: GennoBou/scoop-bucket
+          token: ${{ secrets.BUCKET_PAT }}
+          path: scoop-bucket
+
+      - name: Generate and Update Manifest
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          ASSET_SHA256="${{ needs.build.outputs.asset_sha256 }}"
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/gnb-twview.exe"
+
+          jq \
+            --arg version "$VERSION" \
+            --arg url "$DOWNLOAD_URL" \
+            --arg hash "$ASSET_SHA256" \
+            '.version = $version | .architecture."64bit".url = $url | .architecture."64bit".hash = $hash | .autoupdate.architecture."64bit".url = $url' \
+            gnb-twview/gnb-twview.json > scoop-bucket/bucket/gnb-twview.json
+
+      - name: Commit and Push to Scoop Bucket
+        run: |
+          cd scoop-bucket
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bucket/gnb-twview.json
+          git commit -m "Update gnb-twview to ${{ github.ref_name }}" || echo "No changes to commit"
+          git push
+

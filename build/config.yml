@@ -10,8 +10,8 @@ info:
   productIdentifier: "com.gennobou.gnbtwview" # The unique product identifier
   description: "A specialized minimalist browser for Twitch." # The application description
   copyright: "(c) 2026, GennoBou" # Copyright text
-  comments: "v0.1.0 Release" # Comments
-  version: "0.1.0" # The application version
+  comments: "v0.1.1 Release" # Comments
+  version: "0.1.1" # The application version
   # cfBundleIconName: "appicon" # The macOS icon name in Assets.car icon bundles (optional)
   #                               # Should match the name of your .icon file without the extension
   #                               # If not set and Assets.car exists, defaults to "appicon"
